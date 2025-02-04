@@ -22,15 +22,14 @@ interface UserHobby {
   hobby: Hobby;
 }
 
-type HomeScreenNavigationProp = NavigationProp<RootStackParamList, "Home">;
+// type HomeNavigationProp = NavigationProp<RootStackParamList, "Home">;
 
 const HomeScreenPrev: React.FC = () => {
   const [hobbies, setHobbies] = useState<Hobby[]>([]);
   const [selectedHobbies, setSelectedHobbies] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
- 
-  const navigation = useNavigation<HomeScreenNavigationProp>();
+  // const navigation = useNavigation<HomeNavigationProp>();
 
   useEffect(() => {
     fetchHobbies();
@@ -68,7 +67,6 @@ const HomeScreenPrev: React.FC = () => {
 
   const toggleSelect = async (hobby: Hobby) => {
     if (selectedHobbies.includes(hobby.id)) {
-      // Usuń hobby z wybranych
       try {
         await api.delete("/user_hobbies", {
           params: {
@@ -83,7 +81,6 @@ const HomeScreenPrev: React.FC = () => {
         Alert.alert("Błąd", "Nie udało się usunąć hobby.");
       }
     } else {
-      // Dodaj hobby do wybranych
       try {
         await api.post("/user_hobbies", {
           hobby: hobby.id,
@@ -97,7 +94,7 @@ const HomeScreenPrev: React.FC = () => {
   };
 
   const navigateToSelectedHobbies = () => {
-    navigation.navigate("SelectedHobbies");
+    // navigation.navigate("SelectedHobbies");
   };
 
   if (loading) {

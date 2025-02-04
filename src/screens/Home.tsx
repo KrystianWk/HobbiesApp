@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  SafeAreaView,
 } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,11 +21,11 @@ import * as SecureStore from "expo-secure-store";
 import api from "../services/api";
 import { logout } from "../store/slices/authSlice";
 
-type HomeScreenNavigationProp = NavigationProp<RootStackParamList, "Home">;
+type HomeNavigationProp = NavigationProp<RootStackParamList, "Home">;
 
-const HomeScreen: React.FC = () => {
+const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const navigation = useNavigation<HomeScreenNavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
 
   const { hobbies, selectedHobbies, loading } = useSelector(
     (state: RootState) => state.hobby
@@ -65,8 +66,8 @@ const HomeScreen: React.FC = () => {
       }
     } catch (error) {
       console.error(
-        "Błąd podczas aktualizacji hobby:",
-        error.response?.data || error
+        "Błąd podczas aktualizacji hobby:"
+        // error.response?.data || error
       );
       Alert.alert("Błąd", "Nie udało się zaktualizować hobby.");
     }
@@ -96,36 +97,38 @@ const HomeScreen: React.FC = () => {
   }
 
   return (
-    <View className="flex-1 p-4 bg-gray-100">
-      <Text className="text-2xl font-bold">Wybierz swoje hobby:</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View className="flex-1 pt-12 p-4 bg-gray-100">
+        <Text className="text-2xl font-bold">Wybierz swoje hobby:</Text>
 
-      <FlatList
-        data={hobbies}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            className={`py-2 px-4 mb-2 rounded ${
-              selectedHobbies.some((sh) => sh.hobbyId === item.id)
-                ? "bg-green-500"
-                : "bg-blue-500"
-            }`}
-            onPress={() => toggleSelect(item.id)}>
-            <Text className="text-white">{item.name}</Text>
-          </TouchableOpacity>
-        )}
-      />
-      <TouchableOpacity
-        className="mt-4 bg-purple-500 py-2 px-4 rounded"
-        onPress={navigateToSelectedHobbies}>
-        <Text className="text-white text-center">Zobacz Wybrane Hobby</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        className="mt-4 bg-red-500 py-2 px-4 rounded"
-        onPress={handleLogout}>
-        <Text className="text-white text-center">Wyloguj się</Text>
-      </TouchableOpacity>
-    </View>
+        <FlatList
+          data={hobbies}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              className={`py-2 px-4 mb-2 rounded ${
+                selectedHobbies.some((sh) => sh.hobbyId === item.id)
+                  ? "bg-green-500"
+                  : "bg-blue-500"
+              }`}
+              onPress={() => toggleSelect(item.id)}>
+              <Text className="text-white">{item.name}</Text>
+            </TouchableOpacity>
+          )}
+        />
+        <TouchableOpacity
+          className="mt-4 bg-purple-500 py-2 px-4 rounded"
+          onPress={navigateToSelectedHobbies}>
+          <Text className="text-white text-center">Zobacz Wybrane Hobby</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="mt-4 bg-red-500 py-2 px-4 rounded"
+          onPress={handleLogout}>
+          <Text className="text-white text-center">Wyloguj się</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
-export default HomeScreen;
+export default Home;

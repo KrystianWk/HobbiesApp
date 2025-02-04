@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, ActivityIndicator, Alert } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
 import api from "../services/api";
 import "nativewind";
 import { Hobby, UserHobby } from "../types/types";
+import { useNavigation } from "@react-navigation/native"; // Dodaj import
 
 const SelectedHobbiesScreen: React.FC = () => {
   const [selectedHobbies, setSelectedHobbies] = useState<Hobby[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigation = useNavigation(); // Zainicjuj nawigację
 
   useEffect(() => {
     fetchSelectedHobbies();
@@ -46,7 +55,7 @@ const SelectedHobbiesScreen: React.FC = () => {
   }
 
   return (
-    <View className="flex-1 p-4 bg-gray-100">
+    <View className="flex-1 pt-12 p-4 bg-gray-100">
       <Text className="text-2xl font-bold mb-4">Twoje Wybrane Hobby:</Text>
       <FlatList
         data={selectedHobbies}
@@ -57,6 +66,12 @@ const SelectedHobbiesScreen: React.FC = () => {
           </View>
         )}
       />
+
+      <TouchableOpacity
+        className="mt-4 bg-blue-500 py-2 px-4 rounded"
+        onPress={() => navigation.goBack()}>
+        <Text className="text-white text-center">Wróć do wyboru hobby</Text>
+      </TouchableOpacity>
     </View>
   );
 };
